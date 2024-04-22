@@ -1,0 +1,41 @@
+<div class="container">
+  <a class="navbar-brand">
+    <img ngSrc="/assets/favicon-32x32.png" alt="Bootstrap" width="32" height="32">
+    UTN Game Room
+  </a>
+  <div class="navbar-collapse" id="navbarOptions">
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/home">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link">Juegos</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+      <li class="nav-item dropdown btn-group" *ngIf="isAuthenticated">
+        <div class="btn-group">
+          <button type="button" class="btn btn-outline-primary" routerLink="/profile">Perfil</button>
+          <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" [matMenuTriggerFor]="menu">
+            <span class="visually-hidden">Mostrar Perfil</span>
+          </button>
+          <mat-menu #menu="matMenu">
+            <app-profile-card></app-profile-card>
+          </mat-menu>
+        </div>
+      </li>
+      <li class="nav-item" *ngIf="isAuthenticated">
+        <a class="nav-link" (click)="logout()">Cerrar sesión</a>
+      </li>
+      <li class="nav-item" *ngIf="!isAuthenticated">
+        <a class="nav-link" routerLink="/login">Loggeate</a>
+      </li>
+      <li class="nav-item" *ngIf="!isAuthenticated">
+        <a class="nav-link" routerLink="/sign-in">Registrate</a>
+      </li>
+    </ul>
+  </div>
+
+
+</div>
+

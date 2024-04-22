@@ -1,0 +1,16 @@
+<form class="d-flex flex-column">
+  <img class="mb-4 mx-auto logo" ngSrc="/assets/android-chrome-192x192.png" alt="Logo del Game Room" width="192" height="192" priority>
+  <h1 class="h3 mb-3 fw-normal">Ingresa tus Datos</h1>
+
+  <div class="form-floating">
+    <input type="email" class="form-control" id="floatingInput" placeholder="tecnico@utnfra.com" name="email" [(ngModel)]="email">
+    <label for="floatingInput">Correo Electrónico</label>
+  </div>
+  <div class="form-floating">
+    <input type="password" class="form-control" id="floatingPassword" placeholder="root" name="password" [(ngModel)]="password">
+    <label for="floatingPassword">Contraseña</label>
+  </div>
+
+  <button class="btn btn-primary w-100 py-2" type="submit" (click)="logIn()">Loggeate</button>
+</form>
+<p class="mt-3">No tenés una cuenta? <a routerLink="/sign-in">Registrate</a></p>
