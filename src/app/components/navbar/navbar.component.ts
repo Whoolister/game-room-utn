@@ -4,12 +4,11 @@ import {AuthenticationService} from "../../services/authentication.service";
 import {Subscription} from "rxjs";
 import {NgIf, NgOptimizedImage} from "@angular/common";
 import {MatMenu, MatMenuTrigger} from "@angular/material/menu";
-import {ProfileCardComponent} from "../profile/card/profile-card.component";
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterLink, NgIf, NgOptimizedImage, MatMenu, ProfileCardComponent, MatMenuTrigger],
+  imports: [RouterLink, NgIf, NgOptimizedImage, MatMenu, MatMenuTrigger],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
   host: { 'class': 'navbar navbar-expand bg-dark mb-4' }

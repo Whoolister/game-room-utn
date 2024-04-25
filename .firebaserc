@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "game-room-utn"
+  },
+  "targets": {
+    "game-room-utn": {
+      "hosting": {
+        "game-room": [
+          "game-room-utn"
+        ]
+      }
+    }
   }
 }
