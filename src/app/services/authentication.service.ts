@@ -1,84 +1,85 @@
-import { Injectable } from '@angular/core';
-import {LocalStorageService} from "./local-storage.service";
-import { User, isUser} from "../models/User";
-import {BehaviorSubject, Observable} from "rxjs";
+import {computed, Injectable, Signal, signal, WritableSignal} from '@angular/core';
+import {AngularFireAuth} from "@angular/fire/compat/auth";
+import firebase from "firebase/compat";
+
+type User = firebase.User;
+type UserCredential = firebase.auth.UserCredential;
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService  {
-  private static readonly USERS_KEY = 'users';
-  private static readonly CURRENT_USER_KEY = 'currentUser';
-  static readonly EMAIL_REGEX: RegExp = /^\S+@\S+\.\S+$/gm;
-  static readonly PASSWORD_REGEX: RegExp = /^[a-zA-Z\d]{8,}$/gm;
 
-  constructor(private localStorageService: LocalStorageService) {
-    this.currentUserListener.next(this.getCurrentUser());
+  constructor(private angularFireAuth: AngularFireAuth) {
+    angularFireAuth.onAuthStateChanged((user: User | null) => this._currentUser.set(user));
   }
 
-  private currentUserListener: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
+  private _currentUser: WritableSignal<User | null> = signal(null)
 
-  signIn(email: string, password: string): boolean {
-    const currentUsers: User[] = this.getUsers();
+  get currentUser(): Signal<User | null> {
+    return this._currentUser.asReadonly();
+  }
 
-    if (currentUsers.find(user => user.email === email) !== undefined) {
-      return false;
+  public isLoggedIn: Signal<Boolean> = computed((): boolean => this.currentUser() !== null)
+
+  async register(email: string, password: string, username: string): Promise<RegisterResult> {
+    try {
+      await this.angularFireAuth
+        .createUserWithEmailAndPassword(email, password)
+        .then((userCredential: UserCredential) => userCredential.user?.updateProfile({ displayName: username }));
+
+    } catch (error: any) {
+      switch (error.code) {
+        case 'auth/email-already-in-use':
+          return RegisterResult.UserExists;
+        case 'auth/invalid-email':
+          return RegisterResult.InvalidEmail;
+        case 'auth/operation-not-allowed':
+          return RegisterResult.OperationNotAllowed;
+        default:
+          return RegisterResult.WeakPassword;
+      }
     }
 
-    this.localStorageService.saveObject(AuthenticationService.USERS_KEY, [...currentUsers, { email, password }]);
-
-    return true;
+    return RegisterResult.Success;
   }
 
-  logIn(email: string, password: string): User | null {
-    const currentUsers: User[] = this.getUsers();
-
-    const user: User | undefined = currentUsers.find(user => user.email === email && user.password === password);
-
-    if (user === undefined) {
-      return null;
+  async login(email: string, password: string): Promise<LoginResult> {
+    try {
+      await this.angularFireAuth.signInWithEmailAndPassword(email, password);
+    } catch (error: any) {
+      switch (error.code) {
+        case 'auth/invalid-email':
+          return LoginResult.InvalidEmail;
+        case 'auth/user-disabled':
+          return LoginResult.UserDisabled;
+        case 'auth/user-not-found':
+          return LoginResult.UserNotFound;
+        default:
+          return LoginResult.WrongPassword;
+      }
     }
 
-    this.setCurrentUser(user);
-
-    return user;
+    return LoginResult.Success;
   }
 
-  logOut(): void {
-    this.clearCurrentUser();
-
-    this.currentUserListener.next(null);
+  logOut() {
+    this.angularFireAuth.signOut();
   }
+}
 
-  getCurrentUserListener(): Observable<User | null> {
-    return this.currentUserListener.asObservable();
-  }
+export const enum RegisterResult {
+  Success,
+  UserExists,
+  InvalidEmail,
+  OperationNotAllowed,
+  WeakPassword,
+}
 
-  private setCurrentUser(user: User): void {
-    this.localStorageService.saveObject(AuthenticationService.CURRENT_USER_KEY, user);
-
-    this.currentUserListener.next(this.getCurrentUser());
-  }
-
-  private getCurrentUser(): User | null {
-    return this.localStorageService.getObject(AuthenticationService.CURRENT_USER_KEY);
-  }
-
-  private clearCurrentUser(): void {
-    this.localStorageService.remove(AuthenticationService.CURRENT_USER_KEY);
-  }
-
-  private getUsers(): User[] {
-    const currentUsers: User[] | null = this.localStorageService.getObject(AuthenticationService.USERS_KEY);
-
-    if (currentUsers === null) {
-      return [];
-    }
-
-    if (!currentUsers.every(isUser)) {
-      return [];
-    }
-
-    return currentUsers;
-  }
+export const enum LoginResult {
+  Success,
+  InvalidEmail,
+  UserDisabled,
+  UserNotFound,
+  WrongPassword,
 }

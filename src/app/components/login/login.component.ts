@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import {NgOptimizedImage} from "@angular/common";
 import {Router, RouterLink} from "@angular/router";
-import {AuthenticationService} from "../../services/authentication.service";
+import {AuthenticationService, LoginResult} from "../../services/authentication.service";
 import {FormsModule} from "@angular/forms";
-import {User} from "../../models/User";
 
 @Component({
   selector: 'app-login',
@@ -20,18 +19,57 @@ import {User} from "../../models/User";
 export class LoginComponent {
   email: string = '';
   password: string = '';
+  error: string | null = null;
+
+  presetAccounts: PresetAccount[] = [
+    { username: 'Admin', email: 'yodremilte@gufum.com', password: '123456' },
+    { username: 'Jugador 1', email: 'bipsilifye@gufum.com', password: '123456' },
+    { username: 'Jugador 2', email: 'lemlovalme@gufum.com', password: '123456' },
+  ]
 
   constructor(private authenticationService: AuthenticationService, private router: Router) { }
 
-  logIn(): void {
-    const user: User | null = this.authenticationService.logIn(this.email, this.password);
-
-    if (user === null) {
-      this.router.navigate(['/error']);
-      return;
-    }
-
-    this.router.navigate(['/home']);
-    return;
+  populateForm(account: PresetAccount): void {
+    this.email = account.email;
+    this.password = account.password;
   }
+
+  login(): void {
+    this.authenticationService
+      .login(this.email, this.password)
+      .then((result: LoginResult) => this.handleLoginResult(result));
+  }
+
+  dismissError(): void {
+    this.error = null;
+  }
+
+  private handleLoginResult(result: LoginResult): void {
+    switch (result) {
+      case LoginResult.Success:
+        this.router.navigate(['/home']);
+        return;
+      case LoginResult.InvalidEmail:
+        this.error = 'El mail ingresado no es válido.';
+        return;
+      case LoginResult.UserDisabled:
+        this.error = 'El usuario se encuentra deshabilitado.';
+        return;
+      case LoginResult.UserNotFound:
+        this.error = 'No se encontró un usuario con este mail.';
+        return;
+      case LoginResult.WrongPassword:
+        this.error = 'La contraseña ingresada es incorrecta.';
+        return;
+      default:
+        this.router.navigate(['/error']);
+        return;
+    }
+  }
+}
+
+type PresetAccount = {
+  username: string,
+  email: string,
+  password: string,
 }
