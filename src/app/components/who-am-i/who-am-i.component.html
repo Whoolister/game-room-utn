@@ -7,11 +7,11 @@
 
   <mat-list>
     <div mat-subheader>Links</div>
+    <hr>
     @for (link of links; track link.title) {
-
       <mat-list-item>
         <a class="link-underline link-underline-opacity-0" [href]="link.url">
-          <ng-icon [svg]="link.icon"></ng-icon>
+          <mat-icon [fontIcon]="link.icon" class="inline-icon"></mat-icon>
           {{ link.title }}
         </a>
       </mat-list-item>

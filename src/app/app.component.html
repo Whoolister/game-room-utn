@@ -2,4 +2,8 @@
 
 <router-outlet></router-outlet>
 
+@if (isLoggedIn()) {
+  <app-chat-bubble></app-chat-bubble>
+}
+
 <app-footer></app-footer>

@@ -1,9 +1,10 @@
 import {Component, signal} from '@angular/core';
 import {NgOptimizedImage} from "@angular/common";
 import {Router, RouterLink} from "@angular/router";
-import {AuthenticationService, RegisterResult} from "../../services/authentication.service";
+import {AuthenticationService, RegisterResult} from "../../services/auth/authentication.service";
 import {FormsModule} from "@angular/forms";
-import {RandomUsernameService} from "../../services/random-username.service";
+import {RandomUsernameService} from "../../services/utils/random-username.service";
+import {NgbAlert} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-register',
@@ -11,7 +12,8 @@ import {RandomUsernameService} from "../../services/random-username.service";
   imports: [
     NgOptimizedImage,
     RouterLink,
-    FormsModule
+    FormsModule,
+    NgbAlert
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
@@ -41,7 +43,7 @@ export class RegisterComponent {
       case RegisterResult.Success:
         this.router.navigate(['/home']);
         return;
-      case RegisterResult.UserExists:
+      case RegisterResult.EmailExists:
         this.error = 'Ya existe un usuario con este mail.'
         return;
       case RegisterResult.InvalidEmail:

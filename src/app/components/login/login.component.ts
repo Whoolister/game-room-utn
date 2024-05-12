@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import {NgOptimizedImage} from "@angular/common";
 import {Router, RouterLink} from "@angular/router";
-import {AuthenticationService, LoginResult} from "../../services/authentication.service";
+import {AuthenticationService, LoginResult} from "../../services/auth/authentication.service";
 import {FormsModule} from "@angular/forms";
+import {NgbAlert} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-login',
@@ -10,7 +11,8 @@ import {FormsModule} from "@angular/forms";
   imports: [
     NgOptimizedImage,
     RouterLink,
-    FormsModule
+    FormsModule,
+    NgbAlert
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',

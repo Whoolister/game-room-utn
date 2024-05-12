@@ -3,10 +3,7 @@
   <h1 class="h3 mb-3 fw-normal">Ingresa tus Datos</h1>
 
   @if (error !== null) {
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-      {{ error }}
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="dismissError()"></button>
-    </div>
+    <ngb-alert type="danger" (closed)="dismissError()">{{ error }}</ngb-alert>
   }
 
   <div class="form-floating">

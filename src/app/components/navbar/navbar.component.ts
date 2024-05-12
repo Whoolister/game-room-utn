@@ -1,8 +1,9 @@
 import {Component, Signal} from '@angular/core';
 import {RouterLink, RouterLinkActive} from "@angular/router";
-import {AuthenticationService} from "../../services/authentication.service";
+import {AuthenticationService} from "../../services/auth/authentication.service";
 import {NgIf, NgOptimizedImage} from "@angular/common";
 import {MatIcon} from "@angular/material/icon";
+import firebase from "firebase/compat";
 
 @Component({
   selector: 'app-navbar',
@@ -14,6 +15,7 @@ import {MatIcon} from "@angular/material/icon";
 })
 export class NavbarComponent {
   readonly isAuthenticated: Signal<Boolean> = this.authenticationService.isLoggedIn;
+  readonly currentUser: Signal<firebase.User | null> = this.authenticationService.currentUser;
 
   constructor(private authenticationService: AuthenticationService) { }
 

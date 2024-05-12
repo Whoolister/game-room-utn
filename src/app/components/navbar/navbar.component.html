@@ -3,7 +3,7 @@
     <img ngSrc="/assets/favicon-32x32.png" alt="Bootstrap" width="32" height="32">
     UTN Game Room
   </a>
-  <div class="navbar-collapse" id="navbarOptions">
+  <div class="navbar-collapse">
     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
       <li class="nav-item">
         <a class="nav-link" routerLink="/home" routerLinkActive="active">Home</a>
@@ -14,9 +14,13 @@
     </ul>
     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
       @if (isAuthenticated()) {
+        <span class="navbar-text">
+          {{currentUser()?.displayName}}
+        </span>
+        <div class="vr mx-2"></div>
         <button class="btn btn-outline-danger" (click)="logout()">
           Cerrar sesión
-          <mat-icon class="align-middle">logout</mat-icon>
+          <mat-icon fontIcon="logout" class="inline-icon"></mat-icon>
         </button>
       } @else {
         <li class="nav-item">

@@ -8,7 +8,6 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import {environment} from "../environments/environment";
 import {AngularFireModule} from "@angular/fire/compat";
-import {provideNgIconsConfig} from "@ng-icons/core";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,6 +17,5 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(provideFirebaseApp(() => initializeApp(environment))),
     importProvidersFrom(provideFirestore(() => getFirestore())),
     importProvidersFrom(provideAuth(() => getAuth())),
-    provideNgIconsConfig({ size: '1.5em' })
   ]
 };

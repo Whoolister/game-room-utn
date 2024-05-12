@@ -2,15 +2,3 @@
   max-width: 330px;
   padding: 1rem;
 }
-
-.logo {
-  -webkit-filter: drop-shadow(2px 2px 0 white)
-  drop-shadow(-2px 2px 0 white)
-  drop-shadow(2px -2px 0 white)
-  drop-shadow(-2px -2px 0 white);
-
-  filter: drop-shadow(2px 2px 0 white)
-  drop-shadow(-2px 2px 0 white)
-  drop-shadow(2px -2px 0 white)
-  drop-shadow(-2px -2px 0 white);
-}
