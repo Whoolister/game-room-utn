@@ -1,1 +1,9 @@
 <p>hangman works!</p>
+
+@for (row of keyboard; track row.length) {
+  @for (key of row; track key) {
+    <button class="btn btn-primary" (click)="selectLetter(key)" [disabled]="usedLetters.includes(key)">
+      {{ key }}
+    </button>
+  }
+}

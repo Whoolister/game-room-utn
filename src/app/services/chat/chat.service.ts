@@ -8,21 +8,25 @@ import firebase from "firebase/compat";
 })
 export class ChatService {
   private static MESSAGES_COLLECTION = 'messages';
+
   private _messages: WritableSignal<Message[]> = signal([]);
   messages: Signal<Message[]> = this._messages.asReadonly();
 
   constructor(private firestore: AngularFirestore, private authenticationService: AuthenticationService) {
-    this.firestore.collection<Message>('messages').valueChanges().subscribe(messages => this._messages.set(messages));
+    this.firestore
+      .collection<Message>(ChatService.MESSAGES_COLLECTION)
+      .valueChanges()
+      .subscribe(messages => this._messages.set(messages));
   }
 
-  sendMessage(message: string): MessageResult {
+  async sendMessage(message: string): Promise<MessageResult> {
     const currentUser: firebase.User | null = this.authenticationService.currentUser();
 
     if (currentUser === null) return MessageResult.Error;
 
-    this.firestore
+    await this.firestore
       .collection<Message>(ChatService.MESSAGES_COLLECTION)
-      .add({ username: currentUser.displayName!, message: message, timestamp: Date.now() });
+      .add({ username: currentUser.displayName!, content: message, timestamp: Date.now() });
 
     return MessageResult.Success;
   }
@@ -30,7 +34,7 @@ export class ChatService {
 
 export type Message = {
   username: string;
-  message: string;
+  content: string;
   timestamp: number;
 }
 

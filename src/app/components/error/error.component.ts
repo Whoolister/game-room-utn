@@ -7,7 +7,7 @@ import { Location } from '@angular/common';
   imports: [],
   templateUrl: './error.component.html',
   styleUrl: './error.component.css',
-  host: { 'class': 'w-100 m-auto text-center' },
+  host: { 'class': 'm-auto text-center' },
 })
 export class ErrorComponent {
   constructor(private location: Location) {

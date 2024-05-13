@@ -1,6 +1,24 @@
-<div ngbDropdown>
-  <button ngbDropdownToggle class="btn btn-primary">
-    <mat-icon fontIcon=""></mat-icon>
-  </button>
-
+<div class="chat-background d-flex flex-column p-3 flex-grow-1 rounded-top overflow-auto">
+  @for (message of messages(); track message.timestamp) {
+    <div [class]="isFromCurrentUser(message) ? 'card ms-auto' : 'card me-auto'">
+      <div class="card-header d-flex justify-content-between">
+      <span class="me-5">
+        {{message.username}}
+      </span>
+      <span>
+      {{transformTimestamp(message.timestamp)}}
+      </span>
+      </div>
+      <div class="card-body">
+        <p class="card-text">{{message.content}}</p>
+      </div>
+    </div>
+  }
 </div>
+
+<form autocomplete="off">
+  <div class="input-group">
+    <input type="text" class="form-control" placeholder="Escribe un mensaje" name="message" [(ngModel)]="currentMessage">
+    <button class="btn btn-primary" type="button"><mat-icon fontIcon="send" class="inline-icon" (click)="sendMessage()"></mat-icon></button>
+  </div>
+</form>

@@ -1,4 +1,4 @@
-import {Component, signal} from '@angular/core';
+import {Component} from '@angular/core';
 import {NgOptimizedImage} from "@angular/common";
 import {Router, RouterLink} from "@angular/router";
 import {AuthenticationService, RegisterResult} from "../../services/auth/authentication.service";
@@ -17,7 +17,7 @@ import {NgbAlert} from "@ng-bootstrap/ng-bootstrap";
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
-  host: { 'class': 'w-100 m-auto' },
+  host: { 'class': 'm-auto' },
 })
 export class RegisterComponent {
   username: string = this.randomUsernameService.generateUsername();

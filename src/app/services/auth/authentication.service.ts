@@ -1,18 +1,13 @@
 import {computed, Injectable, Signal, signal, WritableSignal} from '@angular/core';
 import {AngularFireAuth} from "@angular/fire/compat/auth";
 import firebase from "firebase/compat";
-import {AngularFirestore, CollectionReference, QuerySnapshot} from "@angular/fire/compat/firestore";
+import {UserService} from "./user.service";
+import {LogService} from "./log.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService  {
-  private static USERS_COLLECTION = 'users';
-  private static LOGIN_COLLECTION = 'login-logs';
-
-  constructor(private fireAuth: AngularFireAuth, private firestore: AngularFirestore) {
-    fireAuth.onAuthStateChanged((user: firebase.User | null) => this._currentUser.set(user));
-  }
 
   private _currentUser: WritableSignal<firebase.User | null> = signal(null)
 
@@ -20,26 +15,26 @@ export class AuthenticationService  {
     return this._currentUser.asReadonly();
   }
 
-  public isLoggedIn: Signal<Boolean> = computed((): boolean => this.currentUser() !== null)
+  isLoggedIn: Signal<Boolean> = computed((): boolean => this.currentUser() !== null)
+
+  constructor(
+    private fireAuth: AngularFireAuth,
+    private userService: UserService,
+    private logService: LogService
+  ) {
+    fireAuth.onAuthStateChanged((user: firebase.User | null) => this._currentUser.set(user));
+  }
 
   async register(email: string, password: string, username: string): Promise<RegisterResult> {
     try {
-      const userCollection: CollectionReference<User> = this.firestore
-        .collection<User>(AuthenticationService.USERS_COLLECTION)
-        .ref;
-
-      const existingUser: QuerySnapshot<User> = await userCollection.where('username', '==', username).get();
-
-      if (!existingUser.empty) return RegisterResult.UsernameExists;
+      if (!await this.userService.exists(username)) return RegisterResult.UsernameExists;
 
       await this.fireAuth
         .createUserWithEmailAndPassword(email, password)
-        .then(
-          (userCredential: firebase.auth.UserCredential) => {
-            userCredential.user?.updateProfile({ displayName: username });
-            userCollection.add({ userId: userCredential.user!.uid, username: username });
-          }
-        );
+        .then((userCredential: firebase.auth.UserCredential) => {
+            userCredential.user!.updateProfile({ displayName: username });
+            this.userService.save({ userId: userCredential.user!.uid, username: username });
+        });
 
     } catch (error: any) {
       switch (error.code) {
@@ -61,7 +56,7 @@ export class AuthenticationService  {
     try {
       const user: firebase.auth.UserCredential = await this.fireAuth.signInWithEmailAndPassword(email, password);
 
-      this.logLogin(user.user!.displayName!)
+      this.logService.logLogin(user.user!.displayName!)
     } catch (error: any) {
       switch (error.code) {
         case 'auth/invalid-email':
@@ -78,20 +73,9 @@ export class AuthenticationService  {
     return LoginResult.Success;
   }
 
-  logOut(): void {
-    this.fireAuth.signOut();
+  async logOut(): Promise<void> {
+    await this.fireAuth.signOut();
   }
-
-  private logLogin(username: string): void {
-    this.firestore
-      .collection<{ username: string, timestamp: number }>(AuthenticationService.LOGIN_COLLECTION)
-      .add({username: username, timestamp: Date.now()});
-  }
-}
-
-type User = {
-  userId: string;
-  username: string;
 }
 
 export const enum RegisterResult {

@@ -8,11 +8,13 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import {environment} from "../environments/environment";
 import {AngularFireModule} from "@angular/fire/compat";
+import {HttpClientModule} from "@angular/common/http";
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideAnimationsAsync(),
+    importProvidersFrom(HttpClientModule),
     importProvidersFrom(AngularFireModule.initializeApp(environment)),
     importProvidersFrom(provideFirebaseApp(() => initializeApp(environment))),
     importProvidersFrom(provideFirestore(() => getFirestore())),

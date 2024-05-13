@@ -16,14 +16,14 @@ import {NgbAlert} from "@ng-bootstrap/ng-bootstrap";
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
-  host: { 'class': 'w-100 m-auto' },
+  host: { 'class': 'm-auto' },
 })
 export class LoginComponent {
   email: string = '';
   password: string = '';
   error: string | null = null;
 
-  presetAccounts: PresetAccount[] = [
+  readonly presetAccounts: PresetAccount[] = [
     { username: 'Admin', email: 'yodremilte@gufum.com', password: '123456' },
     { username: 'Jugador 1', email: 'bipsilifye@gufum.com', password: '123456' },
     { username: 'Jugador 2', email: 'lemlovalme@gufum.com', password: '123456' },

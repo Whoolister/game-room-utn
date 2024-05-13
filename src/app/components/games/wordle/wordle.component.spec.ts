@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BubbleComponent } from './bubble.component';
+import { WordleComponent } from './wordle.component';
 
-describe('BubbleComponent', () => {
-  let component: BubbleComponent;
-  let fixture: ComponentFixture<BubbleComponent>;
+describe('WordleComponent', () => {
+  let component: WordleComponent;
+  let fixture: ComponentFixture<WordleComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BubbleComponent]
+      imports: [WordleComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(BubbleComponent);
+    fixture = TestBed.createComponent(WordleComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

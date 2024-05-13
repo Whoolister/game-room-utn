@@ -7,7 +7,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   vertical-align: bottom;
 }
 
-.logo {
+.white-outline {
   -webkit-filter: drop-shadow(2px 2px 0 white)
   drop-shadow(-2px 2px 0 white)
   drop-shadow(2px -2px 0 white)
@@ -17,4 +17,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   drop-shadow(-2px 2px 0 white)
   drop-shadow(2px -2px 0 white)
   drop-shadow(-2px -2px 0 white);
+}
+
+.full-page {
+  margin: auto !important;
+  width: 100% !important;
 }

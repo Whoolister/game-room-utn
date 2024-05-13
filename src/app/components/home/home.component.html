@@ -1,1 +1,17 @@
-<p>home works!</p>
+<main class="shadow-lg rounded p-3 bg-body-tertiary">
+  <h1 class="text-center">Juegos</h1>
+  <hr>
+  <div class="container">
+    <div class="row g-5 row-cols-4">
+      @for (game of games; track game.name) {
+        <a class="col game-button link-body-emphasis link-underline link-underline-opacity-0" [routerLink]="game.route">
+          <img [ngSrc]="game.image" class="rounded-5 mx-auto position-relative" alt="Imagen de {{ game.name }}" fill>
+
+          <div>
+            <h4>{{ game.name }}</h4>
+          </div>
+        </a>
+      }
+    </div>
+  </div>
+</main>
