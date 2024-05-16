@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {Router, RouterLink} from "@angular/router";
+import {RouterLink} from "@angular/router";
 import {NgOptimizedImage} from "@angular/common";
 
 @Component({
@@ -15,7 +15,7 @@ import {NgOptimizedImage} from "@angular/common";
 })
 export class HomeComponent {
 
-  readonly games = [
+  readonly games: Game[] = [
     { name: 'Ahorcado', image: 'assets/games/hangman/hangman.png', route: '/hangman'},
     { name: 'Mayor o Menor', image: 'assets/games/higher-or-lower/higher-or-lower.png', route: '/higher-or-lower'},
     { name: 'Preguntados', image: 'assets/games/trivia/trivia.png', route: '/trivia'},

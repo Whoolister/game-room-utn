@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {filter, Observable, repeat, repeatWhen, take, takeWhile} from "rxjs";
+import {filter, Observable, repeat, take} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
