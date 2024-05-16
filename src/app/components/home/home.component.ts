@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import {Component, Signal} from '@angular/core';
 import {RouterLink} from "@angular/router";
 import {NgOptimizedImage} from "@angular/common";
+import {AuthenticationService} from "../../services/auth/authentication.service";
 
 @Component({
   selector: 'app-home',
@@ -22,7 +23,9 @@ export class HomeComponent {
     { name: 'Wordle', image: 'assets/games/wordle/wordle.png', route: '/wordle'},
   ]
 
-  constructor() {}
+  isLoggedIn: Signal<Boolean> = this.authenticationService.isLoggedIn;
+
+  constructor(private authenticationService: AuthenticationService) {}
 }
 
 type Game = {

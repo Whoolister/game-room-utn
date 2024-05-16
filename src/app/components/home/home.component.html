@@ -4,7 +4,7 @@
   <div class="container">
     <div class="row g-5 row-cols-4">
       @for (game of games; track game.name) {
-        <a class="col game-button link-body-emphasis link-underline link-underline-opacity-0" [routerLink]="game.route">
+        <a class="col game-button link-body-emphasis link-underline link-underline-opacity-0" [routerLink]="isLoggedIn() ? game.route: '/login'">
           <img [ngSrc]="game.image" class="rounded-5 mx-auto position-relative" alt="Imagen de {{ game.name }}" priority disableOptimizedSrcset fill>
 
           <div>
