@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {NgOptimizedImage} from "@angular/common";
 import {Router, RouterLink} from "@angular/router";
 import {AuthenticationService, LoginResult} from "../../services/auth/authentication.service";
@@ -18,7 +18,7 @@ import {NgbAlert} from "@ng-bootstrap/ng-bootstrap";
   styleUrl: './login.component.css',
   host: { 'class': 'm-auto' },
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   email: string = '';
   password: string = '';
   error: string | null = null;
@@ -30,6 +30,12 @@ export class LoginComponent {
   ]
 
   constructor(private authenticationService: AuthenticationService, private router: Router) { }
+
+  ngOnInit(): void {
+    if (this.authenticationService.isLoggedIn()) {
+      this.router.navigate(['/home']);
+    }
+  }
 
   populateForm(account: PresetAccount): void {
     this.email = account.email;

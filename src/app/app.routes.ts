@@ -1,26 +1,17 @@
 import { Routes } from '@angular/router';
-import {HomeComponent} from "./components/home/home.component";
-import {LoginComponent} from "./components/login/login.component";
-import {RegisterComponent} from "./components/register/register.component";
-import {ErrorComponent} from "./components/error/error.component";
-import {WhoAmIComponent} from "./components/who-am-i/who-am-i.component";
-import {TriviaComponent} from "./components/games/trivia/trivia.component";
-import {WordleComponent} from "./components/games/wordle/wordle.component";
-import {HigherOrLowerComponent} from "./components/games/higher-or-lower/higher-or-lower.component";
-import {HangmanComponent} from "./components/games/hangman/hangman.component";
 
 export const routes: Routes = [
   // Routes
-  { path: 'home', component: HomeComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'who-am-i', component: WhoAmIComponent },
-  { path: 'hangman', component: HangmanComponent },
-  { path: 'higher-or-lower', component: HigherOrLowerComponent },
-  { path: 'trivia', component: TriviaComponent },
-  { path: 'wordle', component: WordleComponent },
+  { path: 'home', loadComponent: () => import('./components/home/home.component').then(comp => comp.HomeComponent) },
+  { path: 'login', loadComponent: () => import("./components/login/login.component").then(comp => comp.LoginComponent) },
+  { path: 'register', loadComponent: () => import("./components/register/register.component").then(comp => comp.RegisterComponent) },
+  { path: 'who-am-i', loadComponent: () => import("./components/who-am-i/who-am-i.component").then(comp => comp.WhoAmIComponent) },
+  { path: 'hangman', loadComponent: () => import("./components/games/hangman/hangman.component").then(comp => comp.HangmanComponent) },
+  { path: 'higher-or-lower', loadComponent: () => import("./components/games/higher-or-lower/higher-or-lower.component").then(comp => comp.HigherOrLowerComponent) },
+  { path: 'trivia', loadComponent: () => import("./components/games/trivia/trivia.component").then(comp => comp.TriviaComponent) },
+  { path: 'wordle', loadComponent: () => import("./components/games/wordle/wordle.component").then(comp => comp.WordleComponent) },
 
-  { path: 'error', component: ErrorComponent },
+  { path: 'error', loadComponent: () => import("./components/error/error.component").then(comp => comp.ErrorComponent) },
   // Redirects
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'error' }

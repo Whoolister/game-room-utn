@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {NgOptimizedImage} from "@angular/common";
 import {Router, RouterLink} from "@angular/router";
 import {AuthenticationService, RegisterResult} from "../../services/auth/authentication.service";
@@ -19,7 +19,7 @@ import {NgbAlert} from "@ng-bootstrap/ng-bootstrap";
   styleUrl: './register.component.css',
   host: { 'class': 'm-auto' },
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
   username: string = this.randomUsernameService.generateUsername();
   email: string = '';
   password: string = '';
@@ -27,6 +27,12 @@ export class RegisterComponent {
   error: string | null = null;
 
   constructor(private authenticationService: AuthenticationService, private randomUsernameService: RandomUsernameService, private router: Router) { }
+
+  ngOnInit(): void {
+    if (this.authenticationService.isLoggedIn()) {
+      this.router.navigate(['/home']);
+    }
+  }
 
   signIn(): void {
     this.authenticationService
