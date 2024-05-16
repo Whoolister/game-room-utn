@@ -1,20 +1,31 @@
-<main class="shadow-lg rounded p-3 bg-body-tertiary d-flex flex-column">
-  <img class="rounded-circle shadow mx-auto border border-light border-5" ngSrc="/assets/profile.png" height="241" width="241" alt="Foto de Perfil de GitHub" priority>
-  <h1 class="align-self-center">¿Quien soy?</h1>
-  <p class="paragraph">
-    Hola! Soy Lautaro Joaquín Fonseca, un estudiante de la UTN FRA, cursando mi último año de la carrera. Te invito a visitar los links que dejo abajo para conocer más sobre mi.
-  </p>
+<img class="rounded-circle shadow mx-auto border border-light border-5" ngSrc="/assets/profile.png" height="241" width="241" priority disableOptimizedSrcset>
 
-  <mat-list>
-    <div mat-subheader>Links</div>
-    <hr>
-    @for (link of links; track link.title) {
-      <mat-list-item>
-        <a class="link-underline link-underline-opacity-0" [href]="link.url">
-          <mat-icon [fontIcon]="link.icon" class="inline-icon"></mat-icon>
-          {{ link.title }}
-        </a>
-      </mat-list-item>
-    }
-  </mat-list>
-</main>
+<h1 class="align-self-center">¿Quien soy?</h1>
+<p>
+  Hola! Soy Lautaro Joaquín Fonseca, un estudiante de la UTN FRA, cursando mi último año de la carrera. Te invito a visitar los links que dejo abajo para conocer más sobre mi.
+</p>
+
+<mat-list>
+  <div mat-subheader>Links</div>
+  <hr>
+  @for (link of links; track link.title) {
+    <mat-list-item>
+      <a class="link-underline link-underline-opacity-0" [href]="link.url">
+        <mat-icon [fontIcon]="link.icon" class="inline-icon"></mat-icon>
+        {{ link.title }}
+      </a>
+    </mat-list-item>
+  }
+</mat-list>
+
+<hr>
+
+<h2 class="align-self-center">Juego Propio</h2>
+<img class="rounded-circle mx-auto border border-black border-5" ngSrc="assets/games/wordle/wordle.png" height="225" width="225" priority disableOptimizedSrcset>
+<p>
+  Wordle es un juego de adivinanzas de palabras.
+  El jugador tiene que adivinar una palabra de 5 letras en 6 intentos.
+  Cada letra correcta en la posición correcta se muestra en verde, y cada letra correcta en la posición incorrecta se muestra en amarillo.
+  El jugador gana si adivina la palabra en 6 intentos o menos, y pierde si no lo hace.
+  También recibirá más puntos si adivina la palabra en menos intentos.
+</p>

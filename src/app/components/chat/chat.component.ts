@@ -19,11 +19,6 @@ import {FormsModule} from "@angular/forms";
   styleUrl: './chat.component.css',
 })
 export class ChatComponent {
-  readonly messages: Signal<Message[]> = this.chatService.messages;
-  readonly currentUser: Signal<firebase.User | null> = this.authService.currentUser
-
-  currentMessage: string = '';
-
   private static readonly TIMESTAMP_OPTIONS: Intl.DateTimeFormatOptions = {
     year: '2-digit',
     month: 'long',
@@ -31,6 +26,12 @@ export class ChatComponent {
     hour: '2-digit',
     minute: '2-digit'
   };
+
+  readonly messages: Signal<Message[]> = this.chatService.messages;
+  readonly currentUser: Signal<firebase.User | null> = this.authService.currentUser
+
+  currentMessage: string = '';
+
 
   constructor(private authService: AuthenticationService, private chatService: ChatService) {}
 

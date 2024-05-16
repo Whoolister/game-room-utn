@@ -15,7 +15,7 @@ import {MatList, MatListItem, MatListSubheaderCssMatStyler} from "@angular/mater
   ],
   templateUrl: './who-am-i.component.html',
   styleUrl: './who-am-i.component.css',
-  host: { 'class': 'm-auto' },
+  host: { class: 'container d-flex flex-column shadow-lg px-5 py-3 text-center w-75'}
 })
 export class WhoAmIComponent {
   links: Link[] = [

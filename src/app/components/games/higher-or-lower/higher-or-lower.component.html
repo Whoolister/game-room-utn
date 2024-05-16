@@ -1,1 +1,45 @@
-<p>higher-or-lower works!</p>
+<div class="shadow-lg p-5 rounded-5">
+  @if (currentCard === undefined) {
+    <img ngSrc="assets/games/higher-or-lower/back.png" class="d-block mx-auto rounded-5" priority disableOptimizedSrcset width="500" height="726">
+  } @else {
+    <img [ngSrc]="'/assets/games/higher-or-lower/' + toAssetName(currentCard) + '.png'" class="d-block mx-auto" priority disableOptimizedSrcset width="500" height="726">
+  }
+
+  <hr>
+
+  <div class="container d-block text-center position-relative">
+    <span class="fw-bold text-start position-absolute top-0 start-0">Puntaje: {{currentScore}}</span>
+
+    @switch (gameStatus) {
+      @case (GameStatus.Pending) {
+        <button class="btn btn-lg btn-primary mb-3" (click)="start()">Iniciar</button>
+
+        <div class="alert alert-info" role="alert">
+          ¡Bienvenido! Presiona Iniciar para comenzar a adivinar.
+        </div>
+      }
+      @case (GameStatus.Lose) {
+        <button class="btn btn-lg btn-primary mb-3" (click)="start()">Iniciar</button>
+
+        <div class="alert alert-danger" role="alert">
+          ¡Perdiste! Presiona Iniciar para jugar de nuevo.
+        </div>
+      }
+      @case (GameStatus.Playing) {
+        <div class="container text-center">
+          <button class="btn btn-lg btn-success" (click)="guessHigher()">
+            <mat-icon class="fw-bolder">keyboard_arrow_up</mat-icon>
+          </button>
+          <button class="btn btn-lg btn-danger" (click)="guessLower()">
+            <mat-icon class="fw-bolder">keyboard_arrow_down</mat-icon>
+          </button>
+        </div>
+      }
+      @default {
+        <div class="alert alert-warning" role="alert">
+          ¡Error desconocido!
+        </div>
+      }
+    }
+  </div>
+</div>

@@ -1,1 +1,87 @@
-<p>trivia works!</p>
+<div class="shadow-lg p-5 rounded-5 w-75">
+  @if (gameStatus !== GameStatus.Pending) {
+    @if (currentCategory !== undefined) {
+      <h2 class="h4 text-center">Categoría: {{currentCategory.displayName}}</h2>
+
+      <hr>
+
+      @if (currentQuestion !== undefined) {
+        <h2 class="h4 text-center">{{currentQuestion.question}}</h2>
+
+        <hr>
+
+        <div class="container text-center">
+          <div class="row row-cols-2 g-3">
+            @for (answer of answers; track answer) {
+              <div class="col">
+                <button
+                  [class]="'btn btn-lg rounded-5 w-100' + (gameStatus !== GameStatus.Playing ? (answer === correctAnswer ? ' btn-success' : ' btn-danger') : ' btn-primary')"
+                  (click)="selectAnswer(answer)"
+                  [disabled]="gameStatus !== GameStatus.Playing"
+                >
+                  {{ answer }}
+                </button>
+              </div>
+            }
+          </div>
+        </div>
+      } @else {
+        <mat-spinner class="mx-auto" color="accent"></mat-spinner>
+      }
+    } @else {
+      <h2 class="h4 text-center">Selecciona una categoría</h2>
+
+      <div class="container text-center">
+        <div class="row row-cols-2 g-2">
+          @for (category of Category.All; track category.value) {
+            <div class="col">
+              <button class="btn btn-lg btn-primary w-100" (click)="selectCategory(category)">
+                {{category.displayName}}
+              </button>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <hr>
+  }
+
+
+  <div class="container d-block text-center position-relative w-100">
+    <span class="fw-bold text-start position-absolute top-0 start-0">Puntaje: {{currentScore}}</span>
+
+    @switch (gameStatus) {
+      @case (GameStatus.Pending) {
+        <button class="btn btn-lg btn-primary mb-3" (click)="start()">Iniciar</button>
+
+        <div class="alert alert-info" role="alert">
+          ¡Bienvenido! Presiona Iniciar para empezar a jugar.
+        </div>
+      }
+      @case (GameStatus.ChooseCategory) {
+      }
+      @case (GameStatus.Playing) {
+      }
+      @case (GameStatus.Win) {
+        <button class="btn btn-lg btn-success mb-3" (click)="start()">Continuar</button>
+
+        <div class="alert alert-success" role="alert">
+          ¡Correcto!
+        </div>
+      }
+      @case (GameStatus.Lose) {
+        <button class="btn btn-lg btn-primary mb-3" (click)="start()">Iniciar</button>
+
+        <div class="alert alert-danger" role="alert">
+          ¡Perdiste! La respuesta correcta era "{{currentQuestion?.correctAnswers}}". Presiona Iniciar para jugar de nuevo.
+        </div>
+      }
+      @default {
+        <div class="alert alert-warning" role="alert">
+          ¡Error desconocido!
+        </div>
+      }
+    }
+  </div>
+</div>

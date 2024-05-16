@@ -11,7 +11,7 @@ import {ChatBubbleComponent} from "./components/chat/chat-bubble/chat-bubble.com
   imports: [RouterOutlet, FooterComponent, NavbarComponent, ChatBubbleComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
-  host: { 'class': 'd-flex flex-column h-100 w-100 bg-body-tertiary' }
+  host: { 'class': 'd-flex flex-column bg-body-tertiary' }
 })
 export class AppComponent {
   readonly isLoggedIn: Signal<Boolean> = this.authenticationService.isLoggedIn;

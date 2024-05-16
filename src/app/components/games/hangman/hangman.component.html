@@ -1,9 +1,66 @@
-<p>hangman works!</p>
+<div class="shadow-lg p-5 rounded-5 w-75">
+  <img [ngSrc]="'assets/games/hangman/' + incorrectGuesses + '.jpg'" class="d-block mx-auto white-outline" priority disableOptimizedSrcset width="500" height="500">
 
-@for (row of keyboard; track row.length) {
-  @for (key of row; track key) {
-    <button class="btn btn-primary" (click)="selectLetter(key)" [disabled]="usedLetters.includes(key)">
-      {{ key }}
-    </button>
+  <hr>
+
+  @if (currentWord !== undefined) {
+    <div class="container d-block text-center position-relative">
+      <span class="fw-bold position-absolute top-0 start-0">Puntaje: {{currentScore}}</span>
+      <ul>
+        @for (char of currentWord; track char) {
+          <li class="d-inline-block m-2 d-list-none fs-1">
+            {{ usedLetters.includes(char) ? char : '_' }}
+          </li>
+        }
+      </ul>
+    </div>
+
+    <hr>
   }
-}
+
+  @switch (gameStatus) {
+    @case (GameStatus.Pending) {
+      <div class="alert alert-info" role="alert">
+        ¡Bienvenido! Selecciona el largo de la palabra y presiona Iniciar.
+      </div>
+    }
+    @case (gameStatus === GameStatus.Win && currentWord !== undefined) {
+      <div class="alert alert-success" role="alert">
+        ¡Ganaste! La palabra era "{{currentWord}}". Presiona Iniciar para jugar de nuevo.
+      </div>
+    }
+    @case (gameStatus === GameStatus.Lose && currentWord !== undefined) {
+      <div class="alert alert-danger" role="alert">
+        ¡Perdiste! La palabra era "{{currentWord}}". Presiona Iniciar para jugar de nuevo.
+      </div>
+    }
+    @case (GameStatus.Playing) {
+      <div class="container text-center">
+        @for (row of keyboard; track row.length) {
+          <div>
+            @for (key of row; track key) {
+              <button class="btn btn-primary btn-lg rounded-5 m-2" (click)="selectLetter(key)" [disabled]="usedLetters.includes(key)">
+                {{ key }}
+              </button>
+            }
+          </div>
+        }
+      </div>
+    }
+    @default {
+      <mat-spinner color="accent" class="mx-auto"></mat-spinner>
+    }
+  }
+</div>
+<form class="shadow-lg align-self-center d-flex flex-column mx-3 p-3">
+  <h1 class="h3 mb-3 fw-normal">Opciones</h1>
+
+  <fieldset [disabled]="gameStatus === GameStatus.Playing">
+    <div class="form-floating">
+      <input type="number" class="form-control" id="floatingInput" name="length" min="5" max="10" [(ngModel)]="wordLength">
+      <label for="floatingInput">Largo</label>
+    </div>
+
+    <button class="btn btn-primary w-100 py-2" type="submit" (click)="start()">Iniciar</button>
+  </fieldset>
+</form>

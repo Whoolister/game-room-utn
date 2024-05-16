@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   imports: [],
   templateUrl: './footer.component.html',
   styleUrl: './footer.component.css',
-  host: { 'class': 'footer mt-auto py-3 bg-body-tertiary'}
+  host: { 'class': 'mt-auto py-3 bg-dark'}
 })
 export class FooterComponent {
 

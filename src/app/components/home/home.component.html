@@ -5,7 +5,7 @@
     <div class="row g-5 row-cols-4">
       @for (game of games; track game.name) {
         <a class="col game-button link-body-emphasis link-underline link-underline-opacity-0" [routerLink]="game.route">
-          <img [ngSrc]="game.image" class="rounded-5 mx-auto position-relative" alt="Imagen de {{ game.name }}" fill>
+          <img [ngSrc]="game.image" class="rounded-5 mx-auto position-relative" alt="Imagen de {{ game.name }}" priority disableOptimizedSrcset fill>
 
           <div>
             <h4>{{ game.name }}</h4>

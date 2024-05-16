@@ -12,69 +12,44 @@ export class TriviaService {
 
   constructor(private http: HttpClient) { }
 
-  getQuestions(params: QuestionParams): Observable<Question[]> {
+  getQuestions(params: QuestionParams): Observable<Questions> {
     const sanitizedLimit: number = Math.min(10, Math.max(1, Math.floor(params.limit)));
     const sanitizedPage: number = Math.min(99, Math.max(1, Math.floor(params.page)));
-    const sanitizedCategory: string = this.fromCategory(params.category);
-    const sanitizedFormat: string | undefined = params.format ? this.fromFormat(params.format) : undefined;
 
-    if (sanitizedFormat === undefined) {
-      return this.http.get<Question[]>(
+    if (params.format === undefined) {
+      return this.http.get<Questions>(
         TriviaService.API_URL,
         {
-          headers: {
-            'Authorization': `Bearer ${TriviaService.API_KEY}`
-          },
-          params: {limit: sanitizedLimit, page: sanitizedPage, category: sanitizedCategory}
+          headers: {'Authorization': TriviaService.API_KEY},
+          params: {limit: sanitizedLimit, page: sanitizedPage, category: params.category.value}
         }
       );
     } else {
-      return this.http.get<Question[]>(
+      return this.http.get<Questions>(
         TriviaService.API_URL,
         {
-          headers: {
-            'Authorization': `Bearer ${TriviaService.API_KEY}`
-          },
-          params: {limit: sanitizedLimit, page: sanitizedPage, category: sanitizedCategory, format: sanitizedFormat}
+          headers: {'Authorization': TriviaService.API_KEY},
+          params: {limit: sanitizedLimit, page: sanitizedPage, category: params.category.value, format: params.format.value}
         }
       );
-    }
-  }
-
-  private fromCategory(category: Category): string {
-    switch (category) {
-      case Category.GEOGRAPHY:
-        return 'geography';
-      case Category.ART_AND_LITERATURE:
-        return 'arts&literature';
-      case Category.ENTERTAINMENT:
-        return 'entertainment';
-      case Category.SCIENCE_AND_NATURE:
-        return 'science&nature';
-      case Category.SPORTS_AND_LEISURE:
-        return 'sports&leisure';
-      case Category.HISTORY:
-        return 'history';
-    }
-  }
-
-  private fromFormat(format: Format): string {
-    switch (format) {
-      case Format.BOOLEAN:
-        return 'boolean';
-      case Format.MULTIPLE_CHOICE:
-        return 'multiple';
     }
   }
 }
 
-type Question = {
+export type Questions = {
+  questions: Question[];
+  total: number;
+  page: number;
+  perPage: number;
+}
+
+export type Question = {
   id: string;
   category: string;
   format: string;
   question: string;
-  correct_answer: string;
-  incorrect_answers: string[];
+  correctAnswers: string;
+  incorrectAnswers: string[];
 }
 
 type QuestionParams = {
@@ -84,16 +59,30 @@ type QuestionParams = {
   format: Format | undefined;
 }
 
-enum Category {
-  GEOGRAPHY,
-  ART_AND_LITERATURE,
-  ENTERTAINMENT,
-  SCIENCE_AND_NATURE,
-  SPORTS_AND_LEISURE,
-  HISTORY,
+export class Category {
+  static readonly Geography: Category = new Category('geography', 'Geografia');
+  static readonly ArtAndLiterature: Category = new Category('arts&literature', 'Arte');
+  static readonly Entertainment: Category = new Category('entertainment', 'Entretenimiento');
+  static readonly ScienceAndNature: Category = new Category('science&nature', 'Ciencia');
+  static readonly SportsAndLeisure: Category = new Category('sports&leisure', 'Deportes');
+  static readonly History: Category = new Category('history', 'Historia');
+
+  static readonly All: Category[] = <const> [
+    Category.Geography,
+    Category.ArtAndLiterature,
+    Category.Entertainment,
+    Category.ScienceAndNature,
+    Category.SportsAndLeisure,
+    Category.History
+  ];
+
+  private constructor(public readonly value: string, public readonly displayName: string) {}
 }
 
-enum Format {
-  BOOLEAN,
-  MULTIPLE_CHOICE,
+export class Format {
+  static readonly Boolean: Format = new Format('boolean', 'Verdadero/Falso');
+  static readonly MultipleChoice: Format = new Format('multiple', 'Multiple Choice');
+  static readonly All: Format[] = <const> [Format.Boolean, Format.MultipleChoice];
+
+  private constructor(public readonly value: string, public readonly displayName: string) {}
 }

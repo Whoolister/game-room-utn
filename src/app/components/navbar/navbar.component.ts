@@ -11,7 +11,7 @@ import firebase from "firebase/compat";
   imports: [RouterLink, NgIf, NgOptimizedImage, MatIcon, RouterLinkActive],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
-  host: { 'class': 'navbar navbar-expand bg-dark mb-4' }
+  host: { 'class': 'navbar navbar-expand bg-dark' }
 })
 export class NavbarComponent {
   readonly isAuthenticated: Signal<Boolean> = this.authenticationService.isLoggedIn;

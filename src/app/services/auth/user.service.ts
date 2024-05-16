@@ -36,7 +36,7 @@ type User = {
   username: string;
 }
 
-enum SaveResult {
+const enum SaveResult {
   SUCCESS,
   USERNAME_EXISTS
 }

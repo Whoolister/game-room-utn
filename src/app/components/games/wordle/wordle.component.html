@@ -1,1 +1,96 @@
-<p>wordle works!</p>
+<div class="shadow-lg p-5 rounded-5 w-75">
+  <div class="container text-center">
+    @for (row of board; track row; let i = $index) {
+      <div class="row gx-5 mb-2">
+        @for (letter of row; track letter; let j = $index) {
+
+          <button
+            [class]="
+              'col cell fw-bolder h4 rounded-2 mx-1 p-2 border border-2' + (
+                i < guesses || (i === guesses && gameStatus !== GameStatus.Playing && gameStatus !== GameStatus.Pending)
+                  ? (isLetterInPosition(letter, j) ? ' bg-success-subtle' : isLetterInCurrentWord(letter) ? ' bg-warning-subtle' : '')
+                  : ''
+              ) + (
+                gameStatus !== GameStatus.Pending
+                  ? i === guesses
+                    ? ' border-light' + (gameStatus === GameStatus.Playing && j === currentColumn ? ' bg-light-subtle' : '')
+                    : ' border-dark'
+                  : ' border-dark'
+              )"
+            (click)="selectColumn(j)"
+            [disabled]="i !== guesses || gameStatus !== GameStatus.Playing"
+          >
+            {{ letter }}
+          </button>
+        }
+      </div>
+    }
+  </div>
+
+  <hr>
+
+  <div class="text-center position-relative">
+    <span class="fw-bold position-absolute top-0 start-0">Puntaje: {{currentScore}}</span>
+
+    @switch (gameStatus) {
+      @case (GameStatus.Pending) {
+        <button class="btn btn-lg btn-primary mb-3" (click)="start()">Iniciar</button>
+
+        <div class="alert alert-info" role="alert">
+          ¡Bienvenido! Presiona Iniciar para empezar a jugar.
+        </div>
+      }
+      @case (GameStatus.Win) {
+        @if (currentWord !== undefined) {
+          <button class="btn btn-lg btn-primary mb-3" (click)="start()">Iniciar</button>
+
+          <div class="alert alert-success" role="alert">
+            ¡Ganaste! La palabra era "{{currentWord}}". Presiona Iniciar para jugar de nuevo.
+          </div>
+        } @else {
+          <mat-spinner color="accent" class="mx-auto"></mat-spinner>
+        }
+      }
+      @case (GameStatus.Lose) {
+        @if (currentWord !== undefined) {
+          <button class="btn btn-lg btn-primary mb-3" (click)="start()">Iniciar</button>
+
+          <div class="alert alert-danger" role="alert">
+            ¡Perdiste! La palabra era "{{currentWord}}". Presiona Iniciar para jugar de nuevo.
+          </div>
+        } @else {
+          <mat-spinner color="accent" class="mx-auto"></mat-spinner>
+        }
+      }
+      @case (GameStatus.Playing) {
+        <div class="container text-center position-relative">
+          @for (row of keyboard; track row.length) {
+            <div>
+              @if ($last) {
+                <button class="btn btn-primary btn-lg rounded-5 m-2" (click)="enterGuess()">
+                  Enter
+                </button>
+              }
+
+              @for (key of row; track key) {
+                <button class="btn btn-primary btn-lg rounded-5 m-2" (click)="selectLetter(key)">
+                  {{ key }}
+                </button>
+              }
+
+              @if ($last) {
+                <button class="btn btn-primary btn-lg rounded-5 m-2" (click)="removeLetter()">
+                  <mat-icon class="inline-icon">backspace</mat-icon>
+                </button>
+              }
+            </div>
+          }
+
+        </div>
+      }
+      @default {
+        <mat-spinner color="accent" class="mx-auto"></mat-spinner>
+      }
+    }
+  </div>
+</div>
